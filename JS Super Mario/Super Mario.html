@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Super Azubis</title>
+
+</head>
+
+<body onload="startGame()">
+
+    <img style="display: none;" src="Img/FNSH.png" />
+    <img style="display: none;" src="Img/FR.png" />
+    <img style="display: none;" src="Img/SPD.png" />
+    <img style="display: none;" src="Img/FRZZ.png" />
+    <img style="display: none;" src="Img/STR.png" />
+
+    <canvas style="background-image: url('Img/background.png');" id="canvas" height="512" width="800">Your Brouser doese not support this game.</canvas>
+    <div>
+        <button onclick="setBlock('BDN');"><img src="Img/BDN.png"/></button>
+        <button onclick="setBlock('PPE');"><img src="Img/PPE.png"/></button>
+        <button onclick="setBlock('NRML');"><img src="Img/NRML.png"/></button>
+        <button onclick="setBlock('QSTN');"><img src="Img/QSTN.png"/></button>
+        <button onclick="setBlock('ENEMY');"><img src="Img/ELFT.png"/></button>
+        <button id="EDIT" onclick="edit()">EDIT</button>
+    </div>
+    <div>
+        <input id="SavedGame" placeholder="Savegame">
+        <button onclick="loadGame(0,true)">Laden</button>
+        <br>
+        <Button onclick="saveGame()">Save</Button>
+        <Button onclick="CopyToClipbard()">Save to Clipbard</Button>
+        <div style="word-wrap: break-word; width: 100%;">
+            <p id="SaveGame"></p>
+        </div>
+    </div>
+    <div>
+        <button onclick="level = 0; loadGame(leveldesign[level],false);">Go back to the first level</button>
+        <button onclick="developement()">Create Developement-Enviroment</button>
+    </div>
+    <div><button onclick="generateRandomMap()">Generate Random Map</Map></button></div>
+</body>
+<script src="Gamefiles.js"></script>
+<script src="Player.js"></script>
+<script src="World.js"></script>
+<script src="Enemy.js"></script>
+<script src="Tasten.js"></script>
+<script src="Logic.js"></script>
+<script src="blockselect.js"></script>
+<script src="bullet.js"></script>
+<script src="MapGen.js"></script>
+
+
+</html>
