@@ -1,0 +1,35 @@
+body {
+  margin: 0;
+  background-color: black;
+}
+
+canvas {
+  background-image: url("Img/background.png");
+  image-rendering: pixelated;
+  display: block;
+  margin: auto;
+  /* border-top: 250px solid black; */
+  border-bottom: 250px solid black;
+
+}
+ div {
+  display: block;
+  width: 38%;
+  margin: auto;
+}
+
+button{
+  width: auto;
+  margin: auto;
+}
+input{
+  display: block;
+  width: 100%;
+  margin: auto;
+  margin: 0;
+}
+/* div{
+  width: auto;
+  display: block;
+  margin: auto;
+} */

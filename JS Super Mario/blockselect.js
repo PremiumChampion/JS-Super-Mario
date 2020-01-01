@@ -1,7 +1,7 @@
+"use strict";
 var blcktyp = "BDN";
 
-function setBlock(type)
-{   
+function setBlock(type) {
     switch (type) {
         case "BDN":
             blcktyp = "BDN";
@@ -10,7 +10,7 @@ function setBlock(type)
             blcktyp = "PPE";
             break;
         case "NRML":
-             blcktyp = "NRML";
+            blcktyp = "NRML";
             break;
         case "QSTN":
             blcktyp = "QSTN";
@@ -22,20 +22,19 @@ function setBlock(type)
 }
 
 
-function edit()
-{
-    if(document.getElementById("EDIT").innerHTML === "EDIT")
-    {
+function edit() {
+    if (document.getElementById("EDIT").innerHTML === "EDIT") {
         clearInterval(playerMovement);
         clearInterval(enemyMovement);
+        clearInterval(bossFire);
+
     }
-    else
-    {
-        enemyMovement = setInterval(function() {moveEnemys()}, 40);
-        playerMovement = setInterval(function() {movePlayer()}, 10);
+    else {
+        enemyMovement = setInterval(function () { moveEnemys() }, 40);
+        playerMovement = setInterval(function () { movePlayer() }, 10);
     }
     document.getElementById("EDIT").innerHTML = document.getElementById("EDIT").innerHTML === "EDIT" ? "RESUME" : "EDIT";
-    
+
 }
 
 

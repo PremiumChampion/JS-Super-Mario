@@ -1,23 +1,19 @@
-const emptyGame = "################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################################";
-function loadGame(SavedGame, GetSavedgame)
-{   
+"use strict";
+function loadGame(SavedGame, GetSavedgame) {
     for (var j = 0; j < ppeIntervalls.length; j++) {
-         clearInterval(ppeIntervalls[j]);
+        clearInterval(ppeIntervalls[j]);
     }
     ppeIntervalls = [];
     var loadingPossible;
-    do
-    {
+    do {
         loadingPossible = true;
 
-        if(GetSavedgame === true)
-        {
-        SavedGame = document.getElementById("SavedGame").value;
-        document.getElementById("SavedGame").value = "";
+        if (GetSavedgame === true) {
+            SavedGame = document.getElementById("SavedGame").value;
+            document.getElementById("SavedGame").value = "";
         }
 
-        if(SavedGame.length === 1600)
-        {
+        if (SavedGame.length === 3200) {
             mapdesign = [];
             mapdesignPPE = [];
             mapdesignNRML = [];
@@ -26,8 +22,7 @@ function loadGame(SavedGame, GetSavedgame)
             enemys = [];
             filledSpaces = [];
 
-            for(var index = 0; index < 1600; index++) 
-            {
+            for (var index = 0; index < 3200; index++) {
                 switch (SavedGame.charAt(index)) {
                     case "P":
                         mapdesign.push(index);
@@ -52,56 +47,48 @@ function loadGame(SavedGame, GetSavedgame)
                 }
             }
 
-            if(loadingPossible)
-            {
-                if(GetSavedgame)
-                {
+            if (loadingPossible) {
+                if (GetSavedgame) {
                     alert("Game loaded!");
                 }
 
-                ctx.clearRect(0,0,800,512);
+                ctx.clearRect(0, 0, 3200, 512);
                 clearInterval(playerMovement);
                 clearInterval(enemyMovement);
+                clearInterval(bossFire);
+
                 generateMap();
                 document.getElementById("EDIT").innerHTML = "EDIT";
                 break;
-            }
-            else
-            {
+            } else {
                 alert("The Game could not be loaded!");
             }
-        }
-        else
-        {
+        } else {
             loadingPossible = false;
             alert("The Game could not be loaded!");
         }
-        if(!loadingPossible)
-        {
+        if (!loadingPossible) {
             SavedGame = emptyGame;
             GetSavedgame = false;
         }
 
-    }while(!loadingPossible);
+    } while (!loadingPossible);
 }
 
-function saveGame()
-{
+function saveGame() {
     var Save = "";
 
-    for(var index = 0; index < 1600; index++) 
-    {
+    for (var index = 0; index < 3200; index++) {
         Save += GetPlacedBlockTypeAt(index);
     }
 
     document.getElementById("SaveGame").innerHTML = Save;
-    
-    leveldesign[leveldesign.length -1 ] = Save;
-    leveldesign.push(emptyGame);
+
+    //leveldesign[leveldesign.length - 1] = Save;
+    // leveldesign.push(emptyGame);
 }
 
-function CopyToClipbard() 
-{
+function CopyToClipbard() {
     saveGame();
     var el = document.createElement('textarea');
     el.value = document.getElementById("SaveGame").innerHTML;
@@ -114,36 +101,46 @@ function CopyToClipbard()
 }
 
 
-function GetPlacedBlockTypeAt(position)
-{
-    if(mapdesign.includes(position))
-    {
+function GetPlacedBlockTypeAt(position) {
+    if (mapdesign.includes(position)) {
         return "P";
     }
-    if(mapdesignNRML.includes(position))
-    {
+    if (mapdesignNRML.includes(position)) {
         return "H";
     }
-    if(mapdesignQSTN.includes(position))
-    {
+    if (mapdesignQSTN.includes(position)) {
         return "W";
     }
-    if(enemydesign.includes(position))
-    {
+    if (enemydesign.includes(position)) {
         return "E";
     }
-    if(mapdesignPPE.includes(position))
-    {
+    if (mapdesignPPE.includes(position)) {
         return "F";
     }
     return "#";
 }
 
-function developement()
-{
-    loadGame(emptyGame,false); 
-    alert('Development-Enviroment loaded!');
+function developement() {
+    let emptygame = "";
+    for (let z = 0; z < 3200; z++) {
+        emptygame += "#";
+
+    }
+    loadGame(emptygame, false);
+    // alert('Development-Enviroment loaded!');
     document.getElementById("EDIT").innerHTML = "RESUME";
     clearInterval(playerMovement);
+    clearInterval(bossFire);
     clearInterval(enemyMovement);
+}
+
+function SwitchLevels() {
+
+    if (useLVL) {
+        useLVL = false;
+        document.getElementById("switch").innerHTML = "Use Predefined Level = FALSE"
+    } else {
+        useLVL = true;
+        document.getElementById("switch").innerHTML = "Use Predefined Level = TRUE"
+    }
 }
