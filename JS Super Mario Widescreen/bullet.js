@@ -75,7 +75,6 @@ class bullet {
                         loadGame(leveldesign[level], false);
                     } else {
                         generateRandomMap();
-                        generateRandomMap();
                     }
                     // developement();
 

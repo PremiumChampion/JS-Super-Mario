@@ -1,15 +1,5 @@
 "use strict";
 
-window.ELFT = new Image();
-window.ERGT = new Image();
-window.BWSRL = new Image();
-window.BWSRR = new Image();
-ELFT.src = 'Img/ELFT.png';
-ERGT.src = 'Img/ERGT.png';
-BWSRL.src = 'Img/BWSRL.png';
-BWSRR.src = 'Img/BWSRR.png';
-
-
 class enemy {
     constructor(blck, type = "enemy") {
         var posx = (blck % 100) * 16;
@@ -21,10 +11,9 @@ class enemy {
         this.type = type;
         this.id = blck;
         this.turncount = 0;
-        this.live = type === "boss" ? 2 : 1;
+        this.live = type === "boss" ? 1 : 1;
         this.jumping = false;
         this.jumpheight = 0;
-        this.test = false;
     }
 
     fire(direction) {
@@ -53,21 +42,27 @@ class enemy {
             case "enemy":
                 switch (this.walkingDirection) {
                     case "LEFT":
-                        return ELFT;
+                        img.src = 'Img/ELFT.png';
+                        break;
                     case "RIGHT":
-                        return ERGT;
+                        img.src = 'Img/ERGT.png';
+                        break;
                 }
                 break;
             case "boss":
                 switch (this.walkingDirection) {
                     case "LEFT":
-                        return BWSRL;
+                        img.src = 'Img/BWSRL.png';
+                        break;
                     case "RIGHT":
-                        return BWSRR;
+                        img.src = 'Img/BWSRR.png';
+                        break;
                 }
                 break;
+            default:
+                break;
         }
-        return ELFT;
+        return img;
     }
 
     die() {
@@ -86,18 +81,20 @@ class enemy {
         var movex = this.positionx;
         var movey = this.positiony;
         let tolerancex = 1;
+        // let tolerancey = 2;
 
         if (this.type === "boss") {
             this.walkingDirection = this.positionx > mario.positionx ? "LEFT" : "RIGHT";
             tolerancex = this.walkingDirection === "LEFT" ? 18 : 1;
+            // tolerancey = this.walkingDirection === "LEFT" ? 18 : 1;
         }
 
         if (this.type === "boss") {
-            if ((this.walkingDirection === "LEFT" && IsFreeSpace(this.positionx - tolerancex, this.positiony, this) != 1) && this.jumpheight < 66 ||
-                (this.walkingDirection === "RIGHT" && IsFreeSpace(this.positionx + tolerancex, this.positiony, this) != 1) && this.jumpheight < 66) {
+            if ((this.walkingDirection === "LEFT" && IsFreeSpace(this.positionx - tolerancex, this.positiony, this) != 1) && this.jumpheight < 66||
+                (this.walkingDirection === "RIGHT" && IsFreeSpace(this.positionx + tolerancex, this.positiony, this) != 1)&& this.jumpheight < 66) {
 
                 if (IsFreeSpace(this.positionx, this.positiony - 2, this) === 1 && this.jumpheight < 66) {
-                    movey--;
+                    movey = this.positiony - 1;
                     this.jumping = true;
                     this.jumpheight++;
                 }
@@ -107,9 +104,11 @@ class enemy {
                 this.jumping = false;
 
             } else if (this.jumpheight === 66) {
+                
                 this.jumping = false;
 
             }
+            console.log(this.jumpheight);
         }
 
         if (this.walkingDirection === "LEFT" && IsFreeSpace(this.positionx - tolerancex, this.positiony, this) === 1 && this.positionx > 0 && this.falling === false) {
@@ -128,10 +127,10 @@ class enemy {
         }
 
         if (IsFreeSpace(this.positionx, this.positiony + 2, this) === 1 && this.jumping === false) {
-            movey += 2;
+            movey = this.positiony + 2;
             this.falling = true;
         } else if (IsFreeSpace(this.positionx, this.positiony + 1, this) === 1 && this.jumping === false) {
-            movey++;
+            movey = this.positiony + 1;
             this.falling = true;
         } else if (this.jumping === false) {
             this.falling = false;
@@ -139,11 +138,11 @@ class enemy {
         }
 
         var killtest = mario.GetPosition(8) - this.GetPosition(0);
-        // var killtest2 = mario.GetPosition(8) - this.GetPosition(15);
+        var killtest2 = mario.GetPosition(8) - this.GetPosition(15);
 
 
-        if (((killtest === 0) && mario.falling === false && this.type != "boss") ||
-            (this.type === "boss" && (killtest <= -199 && killtest >= -200 || killtest <= -99 && killtest >= -100))) {
+        if (((killtest === 0 || killtest2 === 0) && mario.falling === false && this.type != "boss") ||
+            (this.type === "boss" && (killtest <= -199 && killtest >= -200 || killtest <= -99 && killtest >= -100 || killtest <= -1 && killtest >= 0))) {
 
             mario.AddLive(false);
 
@@ -158,12 +157,10 @@ class enemy {
 
                 clearInterval(playerMovement);
                 clearInterval(enemyMovement);
-                clearInterval(bossFire);
 
                 if (useLVL) {
                     loadGame(leveldesign[level], false);
                 } else {
-                    generateRandomMap();
                     generateRandomMap();
                 }
 
@@ -190,44 +187,7 @@ class enemy {
         else {
 
             if (mario.HasBuff() != "FREEZE") {
-
-                if (bossFire === null) {
-
-                    bossFire = setInterval(function () {
-
-                        for (let inde = 0; inde < enemys.length; inde++) {
-
-                            if (enemys[inde].type === "boss") {
-                                var testbul = enemys[inde].positionx - mario.positionx;
-
-                                if (testbul < 400 && testbul > -400) {
-                                    // var tmpbullet3 = new bullet(enemys[inde].positionx, enemys[inde].positiony, enemys[inde].walkingDirection === "LEFT" ? "LFT" : "RGT", "enemy");
-                                    // tmpbullet3.Interval = setInterval(function () { tmpbullet3.move() }, 3);
-                                    var abc = enemys[inde].walkingDirection === "LEFT" ? 32 : 0;
-                                    var tmpbullet2 = new bullet((enemys[inde].positionx - abc), enemys[inde].positiony - 16, enemys[inde].walkingDirection === "LEFT" ? "LFT" : "RGT", "enemy");
-                                    tmpbullet2.Intervall = setInterval(function () { tmpbullet2.move() }, 20);
-                                }
-                            }
-                        }
-                    }, 3000);
-                }
-
-                if (this.type === "boss") {
-                    if (this.test && this.positionx === movex && this.positiony === movey && IsFreeSpace(this.positionx + 1, this.positiony + 16, this)) {
-                        console.log(this.positionx + " " + movex + " " + this.positiony + " " + movey)
-                        mapdesignNRML.push(this.GetPosition());
-                        var tmpbck1 = new block(this.positionx + 1, this.positiony + 16, "NRML");
-                        tmpbck1.draw();
-                        this.test = false;
-                    } else {
-                        this.test = true;
-                    }
-                }
-
                 this.move(movex, movey);
-            } else {
-                clearInterval(bossFire);
-                bossFire = null;
             }
         }
     }

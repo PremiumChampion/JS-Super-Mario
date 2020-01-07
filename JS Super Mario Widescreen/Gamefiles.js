@@ -55,8 +55,6 @@ function loadGame(SavedGame, GetSavedgame) {
                 ctx.clearRect(0, 0, 3200, 512);
                 clearInterval(playerMovement);
                 clearInterval(enemyMovement);
-                clearInterval(bossFire);
-
                 generateMap();
                 document.getElementById("EDIT").innerHTML = "EDIT";
                 break;
@@ -124,23 +122,11 @@ function developement() {
     let emptygame = "";
     for (let z = 0; z < 3200; z++) {
         emptygame += "#";
-
+        
     }
     loadGame(emptygame, false);
     // alert('Development-Enviroment loaded!');
     document.getElementById("EDIT").innerHTML = "RESUME";
     clearInterval(playerMovement);
-    clearInterval(bossFire);
     clearInterval(enemyMovement);
-}
-
-function SwitchLevels() {
-
-    if (useLVL) {
-        useLVL = false;
-        document.getElementById("switch").innerHTML = "Use Predefined Level = FALSE"
-    } else {
-        useLVL = true;
-        document.getElementById("switch").innerHTML = "Use Predefined Level = TRUE"
-    }
 }

@@ -7,7 +7,6 @@ var mario;
 var jump;
 var fire;
 var fireBoss = true;
-var msgShown = false;
 var useLVL = false;
 var secondtime = true;
 var itemPosition = [
@@ -46,12 +45,122 @@ function startGame() {
         loadGame(leveldesign[level], false);
     } else {
         generateRandomMap();
-        generateRandomMap();
     }
 
 }
 
+function generateMap() {
 
+    mario.DrawLive();
+    mario.move(0, 480);
+
+    //FLOOR
+    for (let index = 0; index < 100; index++) {
+        var tmp = index * 16;
+        var tmpbck = new block(tmp, 496, "BDN");
+        tmpbck.draw();
+        if(tmpx % 50 === 0 && blck < heighestblck){
+            heighestblck = blck;
+        }
+    }
+
+    //BDN
+    for (var i = 0; i < mapdesign.length; i++) {
+        var blck = mapdesign[i];
+        var tmpx = blck % 100;
+        var tmpy = Math.floor(blck / 100);
+        var tmpbck = new block(tmpx * 16, tmpy * 16, "BDN");
+
+        if(tmpx % 50 === 0 && blck < heighestblck){
+            heighestblck = blck;
+        }
+
+        tmpbck.draw();
+    }
+
+    //PPE
+    for (var i = 0; i < mapdesignPPE.length; i++) {
+        var blck = mapdesignPPE[i];
+        var tmpx = blck % 100;
+        var tmpy = Math.floor(blck / 100);
+        var tmpbck = new block(tmpx * 16, tmpy * 16, "PPE");
+
+        if(tmpx % 50 === 0 && blck < heighestblck){
+            heighestblck = blck;
+        }
+
+        tmpbck.draw();
+    }
+
+    //NRML
+    for (var i = 0; i < mapdesignNRML.length; i++) {
+        var blck = mapdesignNRML[i];
+        var tmpx = blck % 100;
+        var tmpy = Math.floor(blck / 100);
+        var tmpbck = new block(tmpx * 16, tmpy * 16, "NRML");
+
+        if(tmpx % 50 === 0 && blck < heighestblck){
+            heighestblck = blck;
+        }
+
+        tmpbck.draw();
+    }
+
+    //QSTN
+    for (var i = 0; i < mapdesignQSTN.length; i++) {
+        var blck = mapdesignQSTN[i];
+        var tmpx = blck % 100;
+        var tmpy = Math.floor(blck / 100);
+        var tmpbck = new block(tmpx * 16, tmpy * 16, "QSTN");
+
+        if(tmpx % 50 === 0 && blck < heighestblck){
+            heighestblck = blck;
+        }
+
+        tmpbck.draw();
+    }
+
+    //Finish
+    var blck = 3099;
+    var tmpx = blck % 100;
+    var tmpy = Math.floor(blck / 100);
+    var tmpbck = new block(tmpx * 16, tmpy * 16, "FNSH");
+    tmpbck.draw();
+
+    //ENEMYS
+    for (var index = 0; index < enemydesign.length; index++) {
+        enemys.push(new enemy(enemydesign[index]));
+    }
+
+    if (Math.floor(Math.random() * 5) + 1 === 5 || true) {
+
+        enemys.push(new enemy(heighestblck - 100, "boss"));
+
+        bossFire = setInterval(function () {
+
+            for (let inde = 0; inde < enemys.length; inde++) {
+
+                if (enemys[inde].type === "boss") {
+                    var testbul = enemys[inde].positionx - mario.positionx;
+                    if (testbul < 400 && testbul > -400) {
+                        // var tmpbullet3 = new bullet(enemys[inde].positionx, enemys[inde].positiony, enemys[inde].walkingDirection === "LEFT" ? "LFT" : "RGT", "enemy");
+                        // tmpbullet3.Interval = setInterval(function () { tmpbullet3.move() }, 3);
+                        // var tmpbullet2 = new bullet(enemys[inde].positionx, enemys[inde].positiony - 8, enemys[inde].walkingDirection === "LEFT" ? "LFT" : "RGT", "enemy");
+                        // tmpbullet2.Intervall = setInterval(function () { tmpbullet2.move() }, 10);
+                        //console.log("buk");
+                    }
+                }
+            }
+        }, 1500);
+    }
+
+    // enemys.push(new enemy(50, "boss"));
+    //Start Intervalls
+
+    playerMovement = setInterval(function () { movePlayer() }, 10);
+    enemyMovement = setInterval(function () { moveEnemys() }, 50);
+
+}
 
 
 function moveEnemys() {
@@ -77,19 +186,19 @@ function moveEnemys() {
     var killrange = mario.direction === "LFT" ? -1 : 0;
     for (var index = 0; index < enemys.length; index++) {
         enemys[index].moveEnemy();
-        try {
-            var bosstest = mario.GetPosition(0) - enemys[index].GetPosition(0) + 300;
-            var enemytest = mario.GetPosition(0) - enemys[index].GetPosition(0);
-        } catch{ }
 
-        try {
-            if ((enemytest >= -100 + killrange && enemytest <= -99 + killrange) && (jumpheight > 0 || mario.falling) ||
-                ((bosstest >= -201 && bosstest <= -199) && (jumpheight > 0 || mario.falling) && enemys[index].type === "boss") || enemys[index].turncount >= 50) {
-                enemys[index].die();
-                enemys.splice(index, 1);
-                break;
-            }
-        } catch{ }
+        var bosstest = mario.GetPosition(0) - enemys[index].GetPosition(0) + 300;
+        var enemytest = mario.GetPosition(0) - enemys[index].GetPosition(0);
+
+        if ((enemytest >= -100 + killrange && enemytest <= -99 + killrange) && ( jumpheight > 0  || mario.falling)|| 
+        ((bosstest >= -201 && bosstest <= -199) && ( jumpheight > 0 || mario.falling) && enemys[index].type === "boss") || enemys[index].turncount >= 50) 
+        {
+            console.log(bosstest + " " + jumpheight + " " + mario.falling);
+            console.log(enemytest+ " enem " + jumpheight + " " + mario.falling)
+            enemys[index].die();
+            enemys.splice(index, 1);
+            break;
+        }
     }
 
 }
@@ -108,6 +217,7 @@ function movePlayer() {
             if (mario.GetPosition(-5) === mapdesignQSTN[index]) {
 
                 var randomitem = Math.floor((Math.random() * 7) + 1);
+                randomitem = 2;
                 switch (randomitem) {
                     case 7:
                     case 1:
@@ -133,8 +243,6 @@ function movePlayer() {
                         break;
                 }
 
-                var randomitem = Math.floor((Math.random() * 7) + 1);
-
                 filledSpaces.splice(filledSpaces.indexOf(mapdesignQSTN[index]), 1);
                 mapdesignQSTN.splice(index, 1);
                 let blockposition = mario.GetPosition(8) - 100;
@@ -155,7 +263,7 @@ function movePlayer() {
     if (mario.itm === "FIRE" && fire && kex.Bullet) {
         fire = false;
 
-        var tmpbullet = new bullet(mario.positionx, mario.positiony - 1, mario.playerDirection, "player");
+        var tmpbullet = new bullet(mario.positionx, mario.positiony -1, mario.playerDirection, "player");
         tmpbullet.Intervall = setInterval(function () { tmpbullet.move() }, 3);
     }
 
@@ -211,13 +319,12 @@ function movePlayer() {
         IsFreeSpace(mario.positionx, mario.positiony - speed, mario) === 2) === false) {
         mario.move(movex, movey);
 
-    } else if (!BossAlive()) {
+    } else {
         clearInterval(playerMovement);
         clearInterval(enemyMovement);
         kex.Left = false;
         kex.Up = false;
         kex.Right = false;
-        clearInterval(bossFire);
 
         if (level + 1 < leveldesign.length) {
             level++;
@@ -226,15 +333,7 @@ function movePlayer() {
         if (useLVL) {
             loadGame(leveldesign[level], false);
         } else {
-            level--;
-            generateRandomMap();
             generateRandomMap();
         }
-    } else {
-        if (!msgShown) {
-            alert("Please kill Bowser first!");
-            msgShown = true;
-        } else { }
-
     }
 }

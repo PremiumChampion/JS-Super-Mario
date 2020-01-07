@@ -26,8 +26,6 @@ function edit() {
     if (document.getElementById("EDIT").innerHTML === "EDIT") {
         clearInterval(playerMovement);
         clearInterval(enemyMovement);
-        clearInterval(bossFire);
-
     }
     else {
         enemyMovement = setInterval(function () { moveEnemys() }, 40);

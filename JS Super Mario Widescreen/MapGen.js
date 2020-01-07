@@ -1,5 +1,5 @@
 "use strict";
-class MapDesign {
+class NRML {
     constructor(area_, hillstartx_, hillstarty_, hillsizex_, hillsizey_, hilldegredation_, noenemy_) {
         this.area = area_;
         this.noenemy = noenemy_;
@@ -88,7 +88,7 @@ function generateRandomHills() {
         var hilldegredation = (Math.random() / 3) + (2 / 3);
         area += hillstartx + 2;
 
-        var tmphill = new MapDesign(area, hillstartx, hillstarty, hillsizex, hillsizey, hilldegredation);
+        var tmphill = new NRML(area, hillstartx, hillstarty, hillsizex, hillsizey, hilldegredation);
         var hillobj = tmphill.decode();
 
         for (var index = 0; index < hillobj.hill.length; index++) {

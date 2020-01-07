@@ -1,16 +1,5 @@
 "use strict";
-window.RGT = new Image();
-window.LFT = new Image();
-window.FR = new Image();
-window.STR = new Image();
-window.SPD = new Image();
-window.FRZZ = new Image();
-RGT.src = 'Img/RGT.png';
-LFT.src = 'Img/LFT.png';
-FR.src = 'Img/FR.png';
-STR.src = 'Img/STR.png';
-SPD.src = 'Img/SPD.png';
-FRZZ.src = 'Img/FRZZ.png';
+
 var itemTimeout;
 
 class player {
@@ -32,7 +21,12 @@ class player {
     }
 
     GetImage() {
-        return this.playerDirection === "RGT" ? RGT : LFT;
+        var lft = new Image();
+        lft.src = 'Img/LFT.png';
+        var rgt = new Image();
+        rgt.src = 'Img/RGT.png';
+
+        return this.playerDirection === "RGT" ? rgt : lft;
     }
 
     GetPosition(margin) {
@@ -51,22 +45,22 @@ class player {
 
         if (item != "LIVE") {
             var itmTimeoutTime = 1000;
-            var img;
+            var img = new Image();
             switch (item) {
                 case "FIRE":
-                    img = FR;
+                    img.src = 'Img/FR.png';
                     itmTimeoutTime *= 10;
                     break;
                 case "STAR":
-                    img = STR;
+                    img.src = 'Img/STR.png';
                     itmTimeoutTime *= 5;
                     break;
                 case "SPEED":
-                    img = SPD;
+                    img.src = 'Img/SPD.png';
                     itmTimeoutTime *= 3;
                     break;
                 case "FREEZE":
-                    img = FRZZ;
+                    img.src = 'Img/FRZZ.png';
                     itmTimeoutTime *= 5;
                     break;
             }
@@ -79,7 +73,7 @@ class player {
                 mario.itm = "";
                 ctx.clearRect(0, 0, 16, 16);
             }, itmTimeoutTime);
-
+            
         } else {
             mario.AddLive(true);
         }
@@ -88,7 +82,7 @@ class player {
             enemys.push(new enemy(this.GetPosition(8) - 100));
         }
     }
-
+    
     AddLive(Add) {
         var temptext = "" + this.live;
         ctx.font = "16px Arial";
@@ -100,7 +94,7 @@ class player {
         } else {
             this.live--;
         }
-
+        
         temptext = "" + this.live;
         ctx.fillText(temptext, 16, 16);
     }
